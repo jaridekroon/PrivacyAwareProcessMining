@@ -22,13 +22,14 @@ public class EncryptStampedLog {
 					"Log" }, userAccessible = true, help = "Encrypt log timestamps using JPaillier encryption")
 	@UITopiaVariant(affiliation = "", author = "J.J.H. de Kroon", email = "j.j.h.d.kroon@student.tue.nl")
 	public Object[] log2log(UIPluginContext context, XLog log) {
+		XLog copy = (XLog)log.clone();
 		KeyPair keyPair;
         PublicKey publicKey;
         KeyPairBuilder keyGen = new KeyPairBuilder();
         keyPair = keyGen.generateKeyPair();
         publicKey = keyPair.getPublicKey();
 
-        for(Iterator<XTrace> it = log.iterator(); it.hasNext();) {
+        for(Iterator<XTrace> it = copy.iterator(); it.hasNext();) {
             XTrace trace = it.next();
             for(Iterator<XEvent> it2 = trace.iterator(); it2.hasNext();) {
                 XEvent event = it2.next();
@@ -48,7 +49,7 @@ public class EncryptStampedLog {
             }
         }
         Object[] result = new Object[3];
-        result[0] = log;
+        result[0] = copy;
         result[1] = keyPair;
         result[2] = keyPair.getPublicKey();
 		
